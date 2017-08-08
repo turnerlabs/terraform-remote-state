@@ -27,7 +27,7 @@ resource "aws_s3_bucket" "bucket" {
 
 # lookup the role arn
 data "aws_iam_role" "role" {
-  role_name = "${var.role}"
+  name = "${var.role}"
 }
 
 # grant the role access to the bucket

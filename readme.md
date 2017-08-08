@@ -10,7 +10,7 @@ setup the remote state bucket
 
 ```terraform
 module "tf_remote_state" {
-  source = "github.com/turnerlabs/terraform-remote-state?ref=v1.0.0"
+  source = "github.com/turnerlabs/terraform-remote-state?ref=v1.1.0"
 
   region        = "us-east-1"
   role          = "aws-ent-prod-devops"
@@ -25,6 +25,7 @@ output "bucket" {
 ```
 
 ```
+$ tf init
 $ tf plan
 $ tf apply
 
