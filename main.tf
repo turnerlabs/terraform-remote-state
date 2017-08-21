@@ -1,10 +1,21 @@
+/**
+ * A Terraform module that configures an s3 bucket for use with Terraform's remote state feature.
+ *
+ * Useful for creating a common bucket naming convention and attaching a bucket policy using the specified role.
+ */
+
+# region
 variable "region" {
   default = "us-east-1"
 }
 
+# the role that will be used to access the tf remote state
 variable "role" {}
+
+# the application that will be using this remote state
 variable "application" {}
 
+# tags
 variable "tags" {
   type = "map"
 }
@@ -54,6 +65,7 @@ resource "aws_s3_bucket_policy" "bucket_policy" {
 EOF
 }
 
+# the created bucket 
 output "bucket" {
   value = "${aws_s3_bucket.bucket.bucket}"
 }
