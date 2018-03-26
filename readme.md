@@ -46,7 +46,6 @@ output "bucket" {
 
 ```
 $ tf init
-$ tf plan
 $ tf apply
 
 Apply complete! Resources: 3 added, 0 changed, 0 destroyed.
@@ -57,7 +56,7 @@ bucket = tf-state-my-test-app
 
 Now configure your script to use the remote state bucket.  Note that you need to be logged in to the specified role in order to apply your scripts.
 
-```
+```hcl
 terraform {
   backend "s3" {
     region  = "us-east-1"
