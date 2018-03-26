@@ -4,11 +4,6 @@
  * Useful for creating a common bucket naming convention and attaching a bucket policy using the specified role.
  */
 
-# region
-variable "region" {
-  default = "us-east-1"
-}
-
 # the role that will be used to access the tf remote state
 variable "role" {}
 
@@ -18,10 +13,6 @@ variable "application" {}
 # tags
 variable "tags" {
   type = "map"
-}
-
-provider "aws" {
-  region = "${var.region}"
 }
 
 # bucket for storing tf state

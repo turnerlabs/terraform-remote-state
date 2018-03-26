@@ -10,7 +10,6 @@ Useful for creating a common bucket naming convention and attaching a bucket pol
 | Name | Description | Type | Default | Required |
 |------|-------------|:----:|:-----:|:-----:|
 | application | the application that will be using this remote state | string | - | yes |
-| region | region | string | `us-east-1` | no |
 | role | the role that will be used to access the tf remote state | string | - | yes |
 | tags | tags | map | - | yes |
 
@@ -25,9 +24,14 @@ Useful for creating a common bucket naming convention and attaching a bucket pol
 
 setup the remote state bucket
 
-```terraform
+```hcl
+provider "aws" {
+  profile = "my-profile"
+  region  = "us-east-1"
+}
+
 module "tf_remote_state" {
-  source = "github.com/turnerlabs/terraform-remote-state?ref=v1.1.0"
+  source = "github.com/turnerlabs/terraform-remote-state?ref=v2.0.0"
 
   role          = "aws-ent-prod-devops"
   application   = "my-test-app"
