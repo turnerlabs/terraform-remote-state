@@ -15,6 +15,15 @@ variable "tags" {
   type = "map"
 }
 
+//incomplete multipart upload deletion
+variable "multipart_delete" {
+  default = true
+}
+
+variable "multipart_days" {
+  default = 3
+}
+
 # bucket for storing tf state
 resource "aws_s3_bucket" "bucket" {
   bucket        = "tf-state-${var.application}"
@@ -32,6 +41,13 @@ resource "aws_s3_bucket" "bucket" {
         sse_algorithm = "AES256"
       }
     }
+  }
+
+  lifecycle_rule {
+    id                                     = "auto-delete-incomplete-after-x-days"
+    prefix                                 = ""
+    enabled                                = "${var.multipart_delete}"
+    abort_incomplete_multipart_upload_days = "${var.multipart_days}"
   }
 }
 
