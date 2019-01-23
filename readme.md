@@ -10,6 +10,8 @@ Useful for creating a common bucket naming convention and attaching a bucket pol
 | Name | Description | Type | Default | Required |
 |------|-------------|:----:|:-----:|:-----:|
 | application | the application that will be using this remote state | string | - | yes |
+| multipart_days |  | string | `3` | no |
+| multipart_delete | incomplete multipart upload deletion | string | `true` | no |
 | role | the role that will be used to access the tf remote state | string | - | yes |
 | tags | tags | map | - | yes |
 
