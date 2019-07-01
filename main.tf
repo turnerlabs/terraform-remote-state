@@ -24,10 +24,15 @@ variable "multipart_days" {
   default = 3
 }
 
+# whether or not to set force_destroy on the bucket
+variable "force_destroy" {
+  default = "true"
+}
+
 # bucket for storing tf state
 resource "aws_s3_bucket" "bucket" {
   bucket        = "tf-state-${var.application}"
-  force_destroy = "true"
+  force_destroy = "${var.force_destroy}"
 
   versioning {
     enabled = "true"
