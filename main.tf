@@ -5,14 +5,16 @@
  */
 
 # the role that will be used to access the tf remote state
-variable "role" {}
+variable "role" {
+}
 
 # the application that will be using this remote state
-variable "application" {}
+variable "application" {
+}
 
 # tags
 variable "tags" {
-  type = "map"
+  type = map(string)
 }
 
 //incomplete multipart upload deletion
@@ -32,13 +34,13 @@ variable "force_destroy" {
 # bucket for storing tf state
 resource "aws_s3_bucket" "bucket" {
   bucket        = "tf-state-${var.application}"
-  force_destroy = "${var.force_destroy}"
+  force_destroy = var.force_destroy
 
   versioning {
     enabled = "true"
   }
 
-  tags = "${var.tags}"
+  tags = var.tags
 
   server_side_encryption_configuration {
     rule {
@@ -51,19 +53,19 @@ resource "aws_s3_bucket" "bucket" {
   lifecycle_rule {
     id                                     = "auto-delete-incomplete-after-x-days"
     prefix                                 = ""
-    enabled                                = "${var.multipart_delete}"
-    abort_incomplete_multipart_upload_days = "${var.multipart_days}"
+    enabled                                = var.multipart_delete
+    abort_incomplete_multipart_upload_days = var.multipart_days
   }
 }
 
 # lookup the role arn
 data "aws_iam_role" "role" {
-  name = "${var.role}"
+  name = var.role
 }
 
 # grant the role access to the bucket
 resource "aws_s3_bucket_policy" "bucket_policy" {
-  bucket = "${aws_s3_bucket.bucket.id}"
+  bucket = aws_s3_bucket.bucket.id
 
   policy = <<EOF
 {
@@ -83,9 +85,11 @@ resource "aws_s3_bucket_policy" "bucket_policy" {
   ]
 }
 EOF
+
 }
 
 # the created bucket 
 output "bucket" {
-  value = "${aws_s3_bucket.bucket.bucket}"
+  value = aws_s3_bucket.bucket.bucket
 }
+
