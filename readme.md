@@ -10,10 +10,11 @@ Useful for creating a common bucket naming convention and attaching a bucket pol
 | Name | Description | Type | Default | Required |
 |------|-------------|:----:|:-----:|:-----:|
 | application | the application that will be using this remote state | string | - | yes |
-| multipart_days |  | string | `3` | no |
-| multipart_delete | incomplete multipart upload deletion | string | `true` | no |
-| role | the role that will be used to access the tf remote state | string | - | yes |
-| tags | tags | map | - | yes |
+| multipart\_days |  | string | `3` | no |
+| multipart\_delete | incomplete multipart upload deletion | string | `true` | no |
+| role | the primary role that will be used to access the tf remote state | string | - | yes |
+| additional\_roles | additional roles that will be granted access to the remote state | list of strings | \[] | no |
+| tags | tags to apply the created S3 bucket | map | - | yes |
 
 ## Outputs
 
@@ -33,7 +34,7 @@ provider "aws" {
 }
 
 module "tf_remote_state" {
-  source = "github.com/turnerlabs/terraform-remote-state?ref=v3.0.0"
+  source = "github.com/turnerlabs/terraform-remote-state?ref=v3.1.0"
 
   role          = "aws-ent-prod-devops"
   application   = "my-test-app"
