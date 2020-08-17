@@ -37,6 +37,11 @@ variable "force_destroy" {
   default = true
 }
 
+# ensure bucket access is "Bucket and objects not public"
+variable "block_public_access" {
+  default = true
+}
+
 # bucket for storing tf state
 resource "aws_s3_bucket" "bucket" {
   bucket        = "tf-state-${var.application}"
@@ -66,6 +71,8 @@ resource "aws_s3_bucket" "bucket" {
 
 # explicitly block public access
 resource "aws_s3_bucket_public_access_block" "bucket" {
+  count = var.block_public_access ? 1 : 0
+
   bucket                  = aws_s3_bucket.bucket.id
   block_public_acls       = true
   block_public_policy     = true
