@@ -10,6 +10,7 @@ Useful for creating a common bucket naming convention and attaching a bucket pol
 | Name | Description | Type | Default | Required |
 |------|-------------|:----:|:-----:|:-----:|
 | application | the application that will be using this remote state | string | - | yes |
+| block\_public\_access | ensure bucket access is "Bucket and objects not public" | bool | `true` | no |
 | multipart\_days |  | string | `3` | no |
 | multipart\_delete | incomplete multipart upload deletion | string | `true` | no |
 | role | the primary role that will be used to access the tf remote state | string | - | yes |
@@ -34,7 +35,7 @@ provider "aws" {
 }
 
 module "tf_remote_state" {
-  source = "github.com/turnerlabs/terraform-remote-state?ref=v3.1.0"
+  source = "github.com/turnerlabs/terraform-remote-state?ref=v4.0.0"
 
   role          = "aws-ent-prod-devops"
   application   = "my-test-app"
