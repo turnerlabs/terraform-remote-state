@@ -66,6 +66,11 @@ resource "aws_s3_bucket" "bucket" {
     prefix                                 = ""
     enabled                                = var.multipart_delete
     abort_incomplete_multipart_upload_days = var.multipart_days
+
+    # required to keep tf from thinking it needs to change things later
+    expiration {
+        expired_object_delete_marker = false
+    }
   }
 }
 
