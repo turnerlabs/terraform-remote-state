@@ -35,7 +35,7 @@ provider "aws" {
 }
 
 module "tf_remote_state" {
-  source = "github.com/turnerlabs/terraform-remote-state?ref=v4.0.1"
+  source = "github.com/turnerlabs/terraform-remote-state?ref=v4.0.2"
 
   role          = "aws-ent-prod-devops"
   application   = "my-test-app"
