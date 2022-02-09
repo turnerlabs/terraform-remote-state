@@ -73,7 +73,9 @@ resource "aws_s3_bucket" "bucket" {
     }
   }
 
-  ignore_changes = logging
+  lifecycle { 
+    ignore_changes = [ logging ]
+  }
 }
 
 # explicitly block public access
