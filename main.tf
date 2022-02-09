@@ -72,6 +72,8 @@ resource "aws_s3_bucket" "bucket" {
         expired_object_delete_marker = false
     }
   }
+
+  ignore_changes = logging
 }
 
 # explicitly block public access
