@@ -77,7 +77,7 @@ resource "aws_s3_bucket_lifecycle_configuration" "bucket_lifecycle" {
     id                                     = "auto-delete-incomplete-after-x-days"
     status                                 = var.multipart_delete ? "Enabled" : "Disabled"
 
-    abort_incomplte_multipart_upload {
+    abort_incomplete_multipart_upload {
       days_after_initiation = var.multipart_days
     }
 
