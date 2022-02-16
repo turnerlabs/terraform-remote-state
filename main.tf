@@ -47,34 +47,43 @@ resource "aws_s3_bucket" "bucket" {
   bucket        = "tf-state-${var.application}"
   force_destroy = var.force_destroy
 
-  versioning {
-    enabled = true
-  }
-
   tags = var.tags
-
-  server_side_encryption_configuration {
-    rule {
-      apply_server_side_encryption_by_default {
-        sse_algorithm = "AES256"
-      }
-    }
-  }
-
-  lifecycle_rule {
-    id                                     = "auto-delete-incomplete-after-x-days"
-    prefix                                 = ""
-    enabled                                = var.multipart_delete
-    abort_incomplete_multipart_upload_days = var.multipart_days
-
-    # required to keep tf from thinking it needs to change things later
-    expiration {
-        expired_object_delete_marker = false
-    }
-  }
 
   lifecycle { 
     ignore_changes = [ logging ]
+  }
+}
+
+resource "aws_s3_bucket_versioning" "bucket_versioning" {
+  bucket = aws_s3_bucket.bucket.id
+  versioning_configuration  {
+    status = "Enabled"
+  }
+}
+
+resource "aws_s3_bucket_server_side_encryption_configuration"  "bucket_encryption" {
+  bucket = aws_s3_bucket.bucket.id
+  rule {
+    apply_server_side_encryption_by_default {
+      sse_algorithm = "AES256"
+    }
+  }
+}
+
+resource "aws_s3_bucket_lifecycle_configuration" "bucket_lifecycle" {
+  bucket = aws_s3_bucket.bucket.id
+
+  rule {
+    id                                     = "auto-delete-incomplete-after-x-days"
+    status                                 = var.multipart_delete ? "Enabled" : "Disabled"
+
+    abort_incomplte_multipart_upload {
+      days_after_initiation = var.multipart_days
+    }
+
+    expiration {
+        expired_object_delete_marker = false
+    }
   }
 }
 
