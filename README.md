@@ -8,9 +8,9 @@ The way S3 buckets are described in Terraform changed significantly with
 version 4.0.0 of the AWS provider, which corresponds to the `v5.0.0` tag of
 this module.  Be sure to use a previous version of the module (the
 immediately-prior one is v4.0.2) if you are using an older version of the AWS
-provider. In general you should always reference the module with an explicit
-`?ref=_tag_` in the URL and commit your `.terraform.lock.hcl` alongside your
-source code.
+provider. In general it's a good idea always to reference the module with an explicit
+`?ref=_tag_` in the URL and commit the `.terraform.lock.hcl` file created by
+`terraform init` alongside your source code.
 
 
 ## Inputs
