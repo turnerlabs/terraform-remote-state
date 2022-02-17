@@ -37,9 +37,13 @@ provider. In general it's a good idea always to reference the module with an exp
 setup the remote state bucket
 
 ```hcl
-provider "aws" {
-  profile = "my-profile"
-  region  = "us-east-1"
+terraform {
+  required_providers {
+    aws = {
+      source = "hashicorp/aws"
+      version = ">= 4.0.0"
+    }
+  }
 }
 
 module "tf_remote_state" {
@@ -48,17 +52,23 @@ module "tf_remote_state" {
   role          = "aws-ent-prod-devops"
   application   = "my-test-app"
 
-  tags = "${map("team", "my-team", "contact-email", "my-team@my-company.com", "application", "my-app", "environment", "dev", "customer", "my-customer")}"  
+  tags = {
+    team            = "my-team"
+    "contact-email" = "my-team@my-company.com"
+    application     = "my-app"
+    environment     = "dev"
+    customer        = "my-customer"
+  }
 }
 
 output "bucket" {
-  value = "${module.tf_remote_state.bucket}"
+  value = module.tf_remote_state.bucket
 }
 ```
 
 ```
-$ tf init
-$ tf apply
+$ terraform init
+$ terraform apply
 
 Apply complete! Resources: 3 added, 0 changed, 0 destroyed.
 
