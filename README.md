@@ -4,6 +4,14 @@ A Terraform module that configures an s3 bucket for use with Terraform's remote 
 
 Useful for creating a common bucket naming convention and attaching a bucket policy using the specified role.
 
+The way S3 buckets are described in Terraform changed significantly with
+version 4.0.0 of the AWS provider, which corresponds to the `v5.0.0` tag of
+this module.  Be sure to use a previous version of the module (the
+immediately-prior one is v4.0.2) if you are using an older version of the AWS
+provider. In general it's a good idea always to reference the module with an explicit
+`?ref=_tag_` in the URL and commit the `.terraform.lock.hcl` file created by
+`terraform init` alongside your source code.
+
 
 ## Inputs
 
@@ -29,28 +37,38 @@ Useful for creating a common bucket naming convention and attaching a bucket pol
 setup the remote state bucket
 
 ```hcl
-provider "aws" {
-  profile = "my-profile"
-  region  = "us-east-1"
+terraform {
+  required_providers {
+    aws = {
+      source = "hashicorp/aws"
+      version = ">= 4.0.0"
+    }
+  }
 }
 
 module "tf_remote_state" {
-  source = "github.com/turnerlabs/terraform-remote-state?ref=v4.0.2"
+  source = "github.com/turnerlabs/terraform-remote-state?ref=v5.0.0"
 
   role          = "aws-ent-prod-devops"
   application   = "my-test-app"
 
-  tags = "${map("team", "my-team", "contact-email", "my-team@my-company.com", "application", "my-app", "environment", "dev", "customer", "my-customer")}"  
+  tags = {
+    team            = "my-team"
+    "contact-email" = "my-team@my-company.com"
+    application     = "my-app"
+    environment     = "dev"
+    customer        = "my-customer"
+  }
 }
 
 output "bucket" {
-  value = "${module.tf_remote_state.bucket}"
+  value = module.tf_remote_state.bucket
 }
 ```
 
 ```
-$ tf init
-$ tf apply
+$ terraform init
+$ terraform apply
 
 Apply complete! Resources: 3 added, 0 changed, 0 destroyed.
 
