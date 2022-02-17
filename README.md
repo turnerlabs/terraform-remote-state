@@ -4,6 +4,14 @@ A Terraform module that configures an s3 bucket for use with Terraform's remote 
 
 Useful for creating a common bucket naming convention and attaching a bucket policy using the specified role.
 
+The way S3 buckets are described in Terraform changed significantly with
+version 4.0.0 of the AWS provider, which corresponds to the `v5.0.0` tag of
+this module.  Be sure to use a previous version of the module (the
+immediately-prior one is v4.0.2) if you are using an older version of the AWS
+provider. In general you should always reference the module with an explicit
+`?ref=_tag_` in the URL and commit your `.terraform.lock.hcl` alongside your
+source code.
+
 
 ## Inputs
 
