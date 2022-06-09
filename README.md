@@ -23,7 +23,7 @@ provider. In general it's a good idea always to reference the module with an exp
 | multipart\_delete | incomplete multipart upload deletion | string | `true` | no |
 | role | the primary role that will be used to access the tf remote state | string | - | yes |
 | additional\_roles | additional roles that will be granted access to the remote state | list of strings | \[] | no |
-| dynamodb\_state\_locking | if enables, creates a dynamodb table to be used to store state lock status | bool | `false` | no |
+| dynamodb\_state\_locking | if enabled, creates a dynamodb table to be used to store state lock status | bool | `false` | no |
 | tags | tags to apply the created S3 bucket | map | - | yes |
 
 ## Outputs
@@ -91,7 +91,7 @@ terraform {
 
 ##### dynamodb state locking
 
-Terraform S3 backend allows you to define a dynamodb table that can be used to store state locking status. To create and use a table use set dynamodb_state_locking to true.
+Terraform S3 backend allows you to define a dynamodb table that can be used to store state locking status. To create and use a table set dynamodb_state_locking to true.
 
 ```hcl
 terraform {
