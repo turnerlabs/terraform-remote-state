@@ -31,7 +31,7 @@ provider. In general it's a good idea always to reference the module with an exp
 | Name | Description |
 |------|-------------|
 | bucket | the created bucket |
-
+| dynamodb_lock_table | name of dynamodb lock table, if created |
 
 #### usage example
 

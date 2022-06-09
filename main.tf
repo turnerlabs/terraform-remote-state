@@ -110,10 +110,8 @@ resource "aws_dynamodb_table" "state_lock_table" {
   count = var.dynamodb_state_locking ? 1 : 0
 
   name           = "tf-state-lock-${var.application}"
-  billing_mode   = "PROVISIONED"
+  billing_mode   = "PAY_PER_REQUEST"
   hash_key       = "LockID"
-  write_capacity = 1
-  read_capacity  = 1
 
   tags           = var.tags
 
@@ -172,5 +170,5 @@ output "bucket" {
 
 # dynamodb table
 output "dynamodb_lock_table" {
-    value = var.dynamodb_state_locking ? aws_dynamodb_table.state_lock_table[0].id : null
+    value = var.dynamodb_state_locking ? aws_dynamodb_table.state_lock_table[0].name : null
 }
