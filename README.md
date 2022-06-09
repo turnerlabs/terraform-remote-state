@@ -23,6 +23,7 @@ provider. In general it's a good idea always to reference the module with an exp
 | multipart\_delete | incomplete multipart upload deletion | string | `true` | no |
 | role | the primary role that will be used to access the tf remote state | string | - | yes |
 | additional\_roles | additional roles that will be granted access to the remote state | list of strings | \[] | no |
+| dynamodb\_state\_locking | if enables, creates a dynamodb table to be used to store state lock status | bool | `false` | no |
 | tags | tags to apply the created S3 bucket | map | - | yes |
 
 ## Outputs
@@ -84,6 +85,70 @@ terraform {
     region  = "us-east-1"
     bucket  = "tf-state-my-test-app"
     key     = "dev.terraform.tfstate"
+  }
+}
+```
+
+##### dynamodb state locking
+
+Terraform S3 backend allows you to define a dynamodb table that can be used to store state locking status. To create and use a table use set dynamodb_state_locking to true.
+
+```hcl
+terraform {
+  required_providers {
+    aws = {
+      source = "hashicorp/aws"
+      version = ">= 4.0.0"
+    }
+  }
+}
+
+module "tf_remote_state" {
+  source = "github.com/turnerlabs/terraform-remote-state?ref=v5.1.0"
+
+  role                   = "aws-ent-prod-devops"
+  application            = "my-test-app"
+  dynamodb_state_locking = "true"
+
+  tags = {
+    team            = "my-team"
+    "contact-email" = "my-team@my-company.com"
+    application     = "my-app"
+    environment     = "dev"
+    customer        = "my-customer"
+  }
+}
+
+output "bucket" {
+  value = module.tf_remote_state.bucket
+}
+
+output "bucket" {
+  value = module.tf_remote_state.dynamodb_lock_table
+}
+```
+
+```
+$ terraform init
+$ terraform apply
+
+Apply complete! Resources: 7 added, 0 changed, 0 destroyed.
+
+Outputs:
+
+bucket = "tf-state-my-test-app"
+dynamodb_lock_table = "tf-state-lock-my-test-app"
+```
+
+Now configure your script to use the remote state bucket and lock table.  Note that you need to be logged in to the specified role in order to apply your scripts.
+
+```hcl
+terraform {
+  backend "s3" {
+    region         = "us-east-1"
+    bucket         = "tf-state-my-test-app"
+    key            = "dev.terraform.tfstate"
+    dynamodb_table = "tf-state-lock-my-test-app"
   }
 }
 ```
