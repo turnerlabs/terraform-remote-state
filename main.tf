@@ -54,7 +54,7 @@ resource "aws_s3_bucket" "bucket" {
 
   tags = var.tags
 
-  lifecycle {
+  lifecycle { 
     ignore_changes = [ logging ]
   }
 }
@@ -165,7 +165,7 @@ EOF
 
 }
 
-# the created bucket
+# the created bucket 
 output "bucket" {
   value = aws_s3_bucket.bucket.bucket
 }
