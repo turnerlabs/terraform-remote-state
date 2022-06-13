@@ -42,6 +42,11 @@ variable "block_public_access" {
   default = true
 }
 
+# if enabled, we will create a dynamodb table that can be used to store state file lock status
+variable "dynamodb_state_locking" {
+  default = false
+}
+
 # bucket for storing tf state
 resource "aws_s3_bucket" "bucket" {
   bucket        = "tf-state-${var.application}"
@@ -100,6 +105,22 @@ resource "aws_s3_bucket_public_access_block" "bucket" {
   restrict_public_buckets = true
 }
 
+# dynamodb table used to storing lock state
+resource "aws_dynamodb_table" "state_lock_table" {
+  count = var.dynamodb_state_locking ? 1 : 0
+
+  name           = "tf-state-lock-${var.application}"
+  billing_mode   = "PAY_PER_REQUEST"
+  hash_key       = "LockID"
+
+  tags           = var.tags
+
+  attribute {
+    name = "LockID"
+    type = "S"
+  }
+}
+
 # lookup the role arn
 data "aws_iam_role" "role" {
   name = var.role
@@ -147,3 +168,7 @@ output "bucket" {
   value = aws_s3_bucket.bucket.bucket
 }
 
+# dynamodb table
+output "dynamodb_lock_table" {
+    value = var.dynamodb_state_locking ? aws_dynamodb_table.state_lock_table[0].name : null
+}
