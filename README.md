@@ -1,5 +1,7 @@
 ### terraform-remote-state
 
+Current release: v5.2.0
+
 A Terraform module that configures an s3 bucket for use with Terraform's remote state feature.
 
 Useful for creating a common bucket naming convention and attaching a bucket policy using the specified role.
@@ -48,7 +50,7 @@ terraform {
 }
 
 module "tf_remote_state" {
-  source = "github.com/turnerlabs/terraform-remote-state?ref=v5.1.0"
+  source = "github.com/turnerlabs/terraform-remote-state?ref=v5.2.0"
 
   role          = "aws-ent-prod-devops"
   application   = "my-test-app"

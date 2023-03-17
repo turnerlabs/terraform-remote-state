@@ -121,6 +121,14 @@ resource "aws_dynamodb_table" "state_lock_table" {
   }
 }
 
+# grant bucket owner full control of all objects; disable per-object ACLs
+resource "aws_s3_bucket_ownership_controls" "bucket_owner" {
+    bucket = aws_s3_bucket.bucket.id
+    rule {
+      object_ownership = "BucketOwnerPreferred"
+    }
+}
+
 # lookup the role arn
 data "aws_iam_role" "role" {
   name = var.role
@@ -131,7 +139,7 @@ data "aws_iam_role" "additional_roles" {
   name = each.key
 }
 
-# grant the role access to the bucket
+# grant the roles access to the bucket
 resource "aws_s3_bucket_policy" "bucket_policy" {
 
   depends_on = [aws_s3_bucket.bucket]
